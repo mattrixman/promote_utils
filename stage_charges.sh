@@ -1,3 +1,9 @@
+#!/usr/bin/env bash
+
+# first run 
+# mysql_config_editor set --login-path=local --host=localhost --user=username --password
+# to store the password
+
 cat > bill_stage.sql <<_EOF_
 INSERT INTO stage_charge 
 VALUES (379,'HNXG73JY34MXR','USD',150,NULL,NULL,'PENDING','AppBillingController','SUBSCRIPTION',NULL,'INFOLEASE','2017-10-01 00:00:00','2017-11-01 00:00:00','2018-01-16 19:14:48','2018-01-16 19:14:48',NULL,NULL,'V9DK8QQF125J0',NULL,NULL)
@@ -22,16 +28,5 @@ INSERT INTO app_metered_event
 VALUES (56,'83PC5E8J1878C',449,108,1,NULL,'2017-10-01 00:00:00','2018-01-16 19:14:48');
 _EOF_
 
-#cat > stage.sql <<_EOF_
-#REPLACE INTO stage_charge 
-#(uuid, amount, status_owner, type, system_type, request_uuid) 
-#VALUES ('AAAAAAAAAAAAA', 500, 'BBBBBBBBBBBBB', 'SUBSCRIPTION', 'INFOLEASE', 'CCCCCCCCCCCCC');
-#
-#REPLACE INTO stage_merchant_app_charge
-#(merchant_app_id, app_subscription_id, charge_id, modified_time, merchant_id, request_uuid)
-#SELECT 101, 102, id, NOW(), 103, 'CCCCCCCCCCCCC'
-#FROM stage_charge WHERE uuid='AAAAAAAAAAAAA';
-#_EOF_
-
-mysql -uroot -ptest -D test_billing < bill_stage.sql
-mysql -uroot -ptest -D test_meta < meta_stage.sql
+mysql --login-path=local -D test_billing < bill_stage.sql
+mysql --login-path=local -D test_meta < meta_stage.sql
