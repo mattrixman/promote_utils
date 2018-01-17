@@ -4,13 +4,15 @@
 # mysql_config_editor set --login-path=local --host=localhost --user=username --password
 # to store the password
 
+monthly_route_id=$1
+
 dollars() {
-    echo "ifnull(lpad(sum($1), 3, '0'), '000')"
+    echo "ifnull(sum($1), '000')"
 }
 
 db="test_billing"
 table="stage_charge"
-read -a result <<< $(mysql --login-path=local -uroot -e"select $(dollars amount), count(*), $(dollars developer_portion), $(dollars tax) from $db.$table"| tail -n 1)
+read -a result <<< $(mysql --login-path=local -uroot -e"select $(dollars amount), count(*), $(dollars developer_portion), $(dollars tax) from $db.$table where request_uuid = '$monthly_route_id'"| tail -n 1)
 total_charge=${result[0]}
 charge_ct=${result[1]}
 dev_portion=${result[2]}

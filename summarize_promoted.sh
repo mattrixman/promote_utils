@@ -5,7 +5,7 @@
 # to store the password
 
 dollars() {
-    echo "ifnull(lpad(sum($1), 3, '0'), '000')"
+    echo "ifnull(sum($1), '000')"
 }
 
 db="test_meta"
