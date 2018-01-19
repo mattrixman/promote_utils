@@ -10,7 +10,7 @@ dollars() {
     echo "IFNULL(SUM($1), '0')"
 }
 
-db="test_meta"
+db="test_promote"
 table="charge"
 mysql --login-path=local -v -e"SELECT $(dollars amount) AS 'Total Charges', COUNT(*) AS 'Number of Charges' FROM $db.$table"
 

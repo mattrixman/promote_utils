@@ -1,0 +1,19 @@
+$ mysqldump -uroot -ptest meta charge > just_charges.sql
+>  create database temp;
+>  use temp;
+>  source just_charges.sql;
+>  delete from temp.charge where created_time < '2017-12-31 23:59:59'
+$  mysqldump -uroot -ptest meta charge > new_charges.sql
+$  scp new_charges.sql dev16:~
+$  ssh dev16
+ $ mysql -uroot -ptest
+ > create database deleteme;
+ > use deleteme;
+ > source new_charges.sql
+ > delete from meta_bill.merchant_app_charge where meta_bill.merchant_app_charge.charge_id in (select id from deleteme.charge);
+ > delete from meta_bill.merchant_plan_charge where meta_bill.merchant_plan_charge.charge_id in (select id from deleteme.charge);
+ > update app_metered_event set charge_id = NULL where charge_id in (select id from deleteme.charge);
+
+ > delete from email_merchant_charge where email_merchant_charge.charge_id in (select id from deleteme.charge);
+
+ > delete from meta_bill.charge where meta_bill.charge.id in (select id from deleteme.charge);
